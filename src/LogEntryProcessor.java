@@ -7,6 +7,7 @@ public class LogEntryProcessor { // reads the file and adds it to the queue
 
     public Queue<LogEntry> readFileIntoQueue(String fileName) {
         try {
+            System.out.println("Reading log file.\n");
             File logData = new File(fileName);
             Queue<LogEntry> logEntries = new Queue<LogEntry>(); // maybe these can be outside of main?
             Scanner scanner = new Scanner(logData);
@@ -17,12 +18,14 @@ public class LogEntryProcessor { // reads the file and adds it to the queue
                 logEntries.enqueue(dataObjects); // add each log entry into a queue
             }
             scanner.close();
+            System.out.println("Read finished.");
             return logEntries;
         } catch (FileNotFoundException e) {
             System.out.println("file reading error");
             e.printStackTrace();
             return null;
         }
+
     }
 
     public Stack<LogEntry> createErrorStack(Queue<LogEntry> logEntries) {
@@ -49,16 +52,19 @@ public class LogEntryProcessor { // reads the file and adds it to the queue
     }
 
     public void printDataAnalysis(Stack<LogEntry> errorStack) {
+        System.out.println("\n** Log Level Count: **");
+        System.out.println(
+                "INFO: " + infoCount +
+                        "\nWARN: " + warnCount +
+                        "\nERRORS: " + errorCount +
+                        "\nMemory Warnings: " + memoryCount +
+                        "\n");
+
         System.out.println("** Last 100 Errors: **");
         for (int i = 0; i < 100; i++) {
             LogEntry poppedObject = errorStack.pop();
             System.out.println(poppedObject.getLogDataLine());
         }
-        System.out.println("\n** Log Levels: **");
-        System.out.println("Errors - " + errorCount +
-                "\nWarnings - " + warnCount +
-                "\n - Memory Warnings - " + memoryCount +
-                "\nInformation - " + infoCount + "\n");
     }
 }
 
